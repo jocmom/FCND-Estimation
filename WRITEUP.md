@@ -23,6 +23,11 @@ Project outline:
 
 Until now none of the sensors had any noise. The first step to adding additional realism to the problem, and developing an estimator, is adding noise to the quad's sensors. When running scenario 6 the GPS X position and the accelerometer's x measurment are recorded to csv files. In [./visualization/6_Sensor_Noise.iypnb](./visualization/6_Sensor_Noise.iypnb) the standard deviation is calculated and these values are plugged in  `./config/6_Sensornoise.txt`.
 
+```
+GPS standard deviation in x direction: 0.7010171369141591
+IMU acceleration standard deviation in x direction: 0.4919424755126765
+```
+
 5. Run the simulator. If your values are correct, the dashed lines in the simulation will eventually turn green, indicating you’re capturing approx 68% of the respective measurements (which is what we expect within +/- 1 sigma bound for a Gaussian noise model)
 
 
