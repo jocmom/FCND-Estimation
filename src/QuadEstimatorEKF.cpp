@@ -171,12 +171,12 @@ VectorXf QuadEstimatorEKF::PredictState(VectorXf curState, float dt, V3F accel, 
 
   ////////////////////////////// BEGIN STUDENT CODE ///////////////////////////
   
-  // predict position
+  // predict positions
   predictedState(0) = curState(0) + dt * curState(3);
   predictedState(1) = curState(1) + dt * curState(4);
   predictedState(2) = curState(2) + dt * curState(5);
   
-  // predict velocity
+  // predict velocities
   V3F accelInertial = attitude.Rotate_BtoI(accel);
   predictedState(3) = curState(3) + dt * accelInertial.x;
   predictedState(4) = curState(4) + dt * accelInertial.y;
@@ -207,7 +207,24 @@ MatrixXf QuadEstimatorEKF::GetRbgPrime(float roll, float pitch, float yaw)
   //   that your calculations are reasonable
 
   ////////////////////////////// BEGIN STUDENT CODE ///////////////////////////
-
+  
+  float cosTheta = cos(pitch);
+  float sinTheta = sin(pitch);
+  
+  float cosPhi = cos(roll);
+  float sinPhi = sin(roll);
+  
+  float sinPsi = sin(yaw);
+  float cosPsi = cos(yaw);
+  
+  // duplicate multiplications here, but with optimization readability would suffer
+  RbgPrime(0,0) = - cosTheta * sinPsi;
+  RbgPrime(0,1) = - sinPhi  * sinTheta * sinPsi - cosTheta * cosPsi;
+  RbgPrime(0,2) = - cosPhi  * sinTheta * sinPsi + sinPhi   * cosPsi;
+  
+  RbgPrime(1,0) = cosTheta * cosPsi;
+  RbgPrime(1,1) = sinPhi  * sinTheta * cosPsi - cosPhi * sinPsi;
+  RbgPrime(1,2) = cosPhi * sinTheta * cosPsi + sinPhi * sinPsi;
 
   /////////////////////////////// END STUDENT CODE ////////////////////////////
 
