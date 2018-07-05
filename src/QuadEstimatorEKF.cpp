@@ -107,8 +107,11 @@ void QuadEstimatorEKF::UpdateFromIMU(V3F accel, V3F gyro)
   ekfState(6) = q.Yaw();
 
   // normalize yaw to -pi .. pi
-  if (ekfState(6) > F_PI) ekfState(6) -= 2.f*F_PI;
-  if (ekfState(6) < -F_PI) ekfState(6) += 2.f*F_PI;
+  if (ekfState(6) > F_PI) {
+    ekfState(6) -= 2. * F_PI;
+  } else if (ekfState(6) < -F_PI) {
+    ekfState(6) += 2. * F_PI;
+  }
 
   /////////////////////////////// END STUDENT CODE ////////////////////////////
 
@@ -218,12 +221,12 @@ MatrixXf QuadEstimatorEKF::GetRbgPrime(float roll, float pitch, float yaw)
   float cosPsi = cos(yaw);
   
   // duplicate multiplications here, but with optimization readability would suffer
-  RbgPrime(0 ,0) = - cosTheta * sinPsi;
-  RbgPrime(0, 1) = - sinPhi  * sinTheta * sinPsi - cosTheta * cosPsi;
-  RbgPrime(0, 2) = - cosPhi  * sinTheta * sinPsi + sinPhi   * cosPsi;
+  RbgPrime(0 ,0) = -cosTheta * sinPsi;
+  RbgPrime(0, 1) = -sinPhi * sinTheta * sinPsi - cosPhi * cosPsi;
+  RbgPrime(0, 2) = -cosPhi * sinTheta * sinPsi + sinPhi * cosPsi;
   
   RbgPrime(1, 0) = cosTheta * cosPsi;
-  RbgPrime(1, 1) = sinPhi  * sinTheta * cosPsi - cosPhi * sinPsi;
+  RbgPrime(1, 1) = sinPhi * sinTheta * cosPsi - cosPhi * sinPsi;
   RbgPrime(1, 2) = cosPhi * sinTheta * cosPsi + sinPhi * sinPsi;
 
   /////////////////////////////// END STUDENT CODE ////////////////////////////
@@ -279,7 +282,10 @@ void QuadEstimatorEKF::Predict(float dt, V3F accel, V3F gyro)
   gPrime(5, 6) = (RbgPrime(2) * accel).sum() * dt;
   
   // update Covariance matrix
-  ekfCov = gPrime * ekfCov * gPrime.transpose() + Q;
+  // ekfCov = gPrime * ekfCov * gPrime.transpose() + Q;
+  MatrixXf gCov = gPrime * ekfCov;
+  gPrime.transposeInPlace();
+  ekfCov = gCov * gPrime + Q;
 
   /////////////////////////////// END STUDENT CODE ////////////////////////////
 
@@ -304,6 +310,11 @@ void QuadEstimatorEKF::UpdateFromGPS(V3F pos, V3F vel)
   //  - The GPS measurement covariance is available in member variable R_GPS
   //  - this is a very simple update
   ////////////////////////////// BEGIN STUDENT CODE ///////////////////////////
+  
+  for(int i=0; i<6; ++i) {
+    zFromX(i) = ekfState(i);
+    hPrime(i, i) = 1.;
+  }
 
   /////////////////////////////// END STUDENT CODE ////////////////////////////
 
@@ -326,14 +337,14 @@ void QuadEstimatorEKF::UpdateFromMag(float magYaw)
   //  - The magnetomer measurement covariance is available in member variable R_Mag
   ////////////////////////////// BEGIN STUDENT CODE ///////////////////////////
   
-  hPrime(0, 6) = 1;
+  hPrime(0, 6) = 1.;
   zFromX(0) = ekfState(6);
   // normalize the difference between your measured and estimated yaw
   float yawDiff = z(0) - zFromX(0);
   if (yawDiff > F_PI) {
-	  zFromX(0) += 2.f*F_PI;
+    zFromX(0) += 2. * F_PI;
   } else if (yawDiff < -F_PI) {
-	  zFromX(0) -= 2.f*F_PI;
+    zFromX(0) -= 2. * F_PI;
   }
   /////////////////////////////// END STUDENT CODE ////////////////////////////
 
