@@ -42,10 +42,7 @@ q.IntegrateBodyRate(gyro, dtIMU);
 In the screenshot above the attitude estimation using linear scheme (left) and using the improved nonlinear scheme (right). Note that Y axis on error is much greater on left.
 
 
-### Step 3: Prediction Step (scenario 8) ###
-
-In this next step you will be implementing the prediction step of your filter.
-
+### Step 3: Prediction Step (scenario 8-9) ###
 
 1. Run scenario `08_PredictState`.  This scenario is configured to use a perfect IMU (only an IMU). Due to the sensitivity of double-integration to attitude errors, we've made the accelerometer update very insignificant (`QuadEstimatorEKF.attitudeTau = 100`).  The plots on this simulation show element of your estimated state and that of the true state.  At the moment you should see that your estimated state does not follow the true state.
 
