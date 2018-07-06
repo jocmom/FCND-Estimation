@@ -95,11 +95,11 @@ Now we use the GPS sensor to update our state further, this means our position a
 
 ### Step 6: Adding Your Controller ###
 
-Up to this point, we have been working with a controller that has been relaxed to work with an estimated state instead of a real state.  So now, you will see how well your controller performs and de-tune your controller accordingly.
+Now we replaced the project controller that has been relaxed to work with an estimated state instead of a real state with our own controller.
 
 1. Replaced `QuadController.cpp` and `QuadControlParams.txt` with the controller you wrote in the last project.
 
-3. ReRun scenario `11_GPSUpdate` and retuned  Decrease the position and velocity gains (we’ve seen about 30% detuning being effective) to stabilize it.  Your goal is to once again complete the entire simulation cycle with an estimated position error of < 1m.
+2. ReRun scenario `11_GPSUpdate` and retuned the controller parameters. Although it's not as goood as the original controller it passes the test.
 
 ![gps own controller](images/scenario11_own_controller.png)
 
