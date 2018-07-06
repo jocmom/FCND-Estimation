@@ -57,21 +57,10 @@ This matrix is then used as part of the Jacobian Matrix `gPrime` to predict the 
 ![gPrime](images/g_prime.png)
 
 5. Tuned the `QPosXYStd` and the `QVelXYStd` process parameters in `QuadEstimatorEKF.txt` to try to capture the magnitude of the error you see.
- Note that as error grows our simplified model will not capture the real error dynamics (for example, specifically, coming from attitude errors), therefore  try to make it look reasonable only for a relatively short prediction period (the scenario is set for one second).  A good solution looks as follows:
 
-![good covariance](images/predict-good-cov.png)
+![good covariance](images/scenario9.gif)
 
 Looking at this result, you can see that in the first part of the plot, our covariance (the white line) grows very much like the data.
-
-If we look at an example with a `QPosXYStd` that is much too high (shown below), we can see that the covariance no longer grows in the same way as the data.
-
-![bad x covariance](images/bad-x-sigma.PNG)
-
-Another set of bad examples is shown below for having a `QVelXYStd` too large (first) and too small (second).  As you can see, once again, our covariances in these cases no longer model the data well.
-
-![bad vx cov large](images/bad-vx-sigma.PNG)
-
-![bad vx cov small](images/bad-vx-sigma-low.PNG)
 
 ### Step 4: Magnetometer Update ###
 
@@ -102,21 +91,20 @@ Now we use the GPS sensor to update our state further, this means our position a
 4. Tuned the process noise model in `QuadEstimatorEKF.txt` to try to approximately capture the error you see with the estimated uncertainty (standard deviation) of the filter.
 
 5. Implement the EKF GPS Update in the function `UpdateFromGPS()` described in section 7.1.2 of [Estimation for Quadrotors](https://www.overleaf.com/read/vymfngphcccj). Although there is still some position/velocity error the copter is following the desired path and the test passes.
+![gps good](images/scenario11.png)
 
 ### Step 6: Adding Your Controller ###
 
 Up to this point, we have been working with a controller that has been relaxed to work with an estimated state instead of a real state.  So now, you will see how well your controller performs and de-tune your controller accordingly.
 
-1. Replace `QuadController.cpp` with the controller you wrote in the last project.
-
-2. Replace `QuadControlParams.txt` with the control parameters you came up with in the last project.
+1. Replaced `QuadController.cpp` and `QuadControlParams.txt` with the controller you wrote in the last project.
 
 3. Run scenario `11_GPSUpdate`. If your controller crashes immediately do not panic. Flying from an estimated state (even with ideal sensors) is very different from flying with ideal pose. You may need to de-tune your controller. Decrease the position and velocity gains (we’ve seen about 30% detuning being effective) to stabilize it.  Your goal is to once again complete the entire simulation cycle with an estimated position error of < 1m.
 
-**Hint: you may find it easiest to do your de-tuning as a 2 step process by reverting to ideal sensors and de-tuning under those conditions first.**
-
+![gps own controller](images/scenario11_own_controller.png)
 
 ## References ##
 
 - Thanks to Fotokite for the initial development of the project code and simulator.
 - Udacity Flying Car Nanodegree
+- [Estimation for Quadrotors](https://www.overleaf.com/read/vymfngphcccj)
