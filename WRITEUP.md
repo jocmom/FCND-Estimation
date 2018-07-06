@@ -99,7 +99,7 @@ Up to this point, we have been working with a controller that has been relaxed t
 
 1. Replaced `QuadController.cpp` and `QuadControlParams.txt` with the controller you wrote in the last project.
 
-3. Run scenario `11_GPSUpdate`. If your controller crashes immediately do not panic. Flying from an estimated state (even with ideal sensors) is very different from flying with ideal pose. You may need to de-tune your controller. Decrease the position and velocity gains (we’ve seen about 30% detuning being effective) to stabilize it.  Your goal is to once again complete the entire simulation cycle with an estimated position error of < 1m.
+3. ReRun scenario `11_GPSUpdate` and retuned  Decrease the position and velocity gains (we’ve seen about 30% detuning being effective) to stabilize it.  Your goal is to once again complete the entire simulation cycle with an estimated position error of < 1m.
 
 ![gps own controller](images/scenario11_own_controller.png)
 
